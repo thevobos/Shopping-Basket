@@ -17,20 +17,6 @@ class basket
 
     /*
      *
-     * @ Param Basket Max
-     *
-     * */
-    public $basket_max = 10;
-
-    /*
-     *
-     * @ Param Basket Min
-     *
-     * */
-    public $basket_min = 0;
-
-    /*
-     *
      * @ Param Basket Min
      *
      * */
@@ -45,11 +31,7 @@ class basket
      * */
     public function basket_add( $par = [] ){
 
-        if(is_array($par)){
-
-            $this->basket_all[] = array_merge( $par, [ "item_number" => rand(0,999999) ] );
-
-        }
+        if(is_array($par)){ $this->basket_all[$this->basket_name][] = array_merge( $par, [ "item_number" => rand(0,999999) ] ); }
 
         return $this;
     }
@@ -61,9 +43,23 @@ class basket
      *
      *
      * */
-    public function basket_list(){
+    public function basket_name($par = ""){
 
-        return $this->basket_all;
+        $this->basket_name = $par;
+        return $this;
+
+    }
+
+
+    /*
+     *
+     * @ Param Basket İtems List Array
+     *
+     *
+     * */
+    public function basket_list($par = ""){
+
+        return $this->basket_all[$par];
 
     }
 
@@ -73,17 +69,13 @@ class basket
      * @ Param Basket Plus Many İs Number
      * @ Mix Array İtem Price
      * */
-    public function basket_plus_many($par = ""){
+    public function basket_plus_many($par1 = "", $par2 = ""){
 
-        if($par !== ""){
+        if($par1 !== "" and $par2 !== ""){
 
             $zero = 0;
 
-            foreach($this->basket_all as $pro){
-
-                $zero += $pro[$par];
-
-            }
+            foreach($this->basket_all[$par1] as $pro){ $zero += $pro[$par2]; }
 
             return $zero;
 
@@ -97,19 +89,15 @@ class basket
      * @ Mix Basket Remove List İtems For Array
      *
      * */
-    public function basket_remove_item($par = []){
+    public function basket_remove_item($par1 = "",$par2 = []){
 
-       if(is_array($par)){
+       if(is_array($par2) and $par1 !== ""){
 
-           foreach($par as $un){
-
-               unset($this->basket_all[$un]);
-
-           }
+           foreach($par2 as $un){ unset($this->basket_all[$par1][$un]); }
 
        }
 
-        return $this->basket_all;
+        return $this;
 
     }
 
@@ -119,9 +107,9 @@ class basket
      * @ Mix  Array Return Echo Mode
      *
      * */
-    public function basket_plus_items(){
+    public function basket_plus_items($par = ""){
 
-        return count($this->basket_all);
+        if($par == ""){ return count($this->basket_all); }else{ return count($this->basket_all[$par]); }
 
     }
 
